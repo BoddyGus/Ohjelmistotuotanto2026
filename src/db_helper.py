@@ -32,16 +32,21 @@ def setup_db():
     db.session.commit()
 
   print("Creating database")
-  
+
   # Read schema from schema.sql file
   schema_path = os.path.join(os.path.dirname(__file__), 'schema.sql')
   with open(schema_path, 'r') as f:
     schema_sql = f.read().strip()
-  
-  sql = text(schema_sql)
-  db.session.execute(sql)
-  db.session.commit()
 
+  # SQLite executes one SQL statement at a time,
+  # so execute each schema statement separately.
+  for statement in schema_sql.split(";"):
+    statement = statement.strip()
+    if statement:
+      db.session.execute(text(statement))
+
+  # Save all table creations.
+  db.session.commit()
 if __name__ == "__main__":
     with app.app_context():
       setup_db()
