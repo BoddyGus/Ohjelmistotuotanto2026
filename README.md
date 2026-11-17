@@ -5,11 +5,11 @@ See our [group rules](grouprules.md)
 
 ## Product backlog
 
-[Product backlog](https://github.com/users/BoddyGus/projects/4/views/3)
+[Product backlog](https://github.com/users/BoddyGus/projects/4)
 
 ## Sprint 1 backlog
 
-[Sprint 1 backlog](https://github.com/users/BoddyGus/projects/4/views/4)
+[Sprint 1 backlog](https://github.com/users/BoddyGus/projects/4/views/3)
 
 ## DoD
 
@@ -31,3 +31,4 @@ Create a `.env` file in the project root:
 DATABASE_URL=sqlite:///test.db
 SECRET_KEY=dev-secret
 TEST_ENV=true
+checking
