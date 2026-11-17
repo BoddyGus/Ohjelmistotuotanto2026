@@ -23,3 +23,11 @@ A task is complete when:
 
 ## OKD
 
+## Local setup
+
+Create a `.env` file in the project root:
+
+```env
+DATABASE_URL=sqlite:///test.db
+SECRET_KEY=dev-secret
+TEST_ENV=true
