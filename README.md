@@ -31,4 +31,3 @@ Create a `.env` file in the project root:
 DATABASE_URL=sqlite:///test.db
 SECRET_KEY=dev-secret
 TEST_ENV=true
-checking
