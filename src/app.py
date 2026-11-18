@@ -1,8 +1,10 @@
 from flask import render_template, jsonify, request, flash, redirect, url_for
+from sqlalchemy.exc import IntegrityError
 from db_helper import reset_db
 from repositories.reference_repository import get_references, add_reference
 from reference_validation import ReferenceValidationError, validate_reference
-from config import app, test_env
+from reference_types import get_reference_type
+from config import app, db, test_env
 
 
 @app.route("/")
@@ -23,7 +25,20 @@ def new_reference():
         flash(str(error))
         return render_template("add_reference.html", form_data=form_data), 400
 
-    add_reference(**reference_data)
+    if get_reference_type(reference_data["reference_type"]) is None:
+        flash("Unsupported reference type. Choose book, article, or inproceedings.")
+        return render_template("add_reference.html", form_data=form_data), 400
+
+    try:
+        add_reference(**reference_data)
+    except IntegrityError:
+        db.session.rollback()
+        flash(
+            "Could not add reference because one or more values are invalid. "
+            "Check the citation key and reference details."
+        )
+        return render_template("add_reference.html", form_data=form_data), 400
+
     return redirect(url_for("index"))
 
 
