@@ -2,6 +2,16 @@ class ReferenceValidationError(Exception):
     """Raised when submitted reference data is invalid."""
 
 
+def is_duplicate_citation_key(error):
+    """Return whether a database integrity error is a citation-key conflict."""
+    original_error = error.orig
+    if "UNIQUE constraint failed: bibliographic_references.citation_key" in str(original_error):
+        return True
+
+    diagnostic = getattr(original_error, "diag", None)
+    return getattr(diagnostic, "constraint_name", None) == "bibliographic_references_citation_key_key"
+
+
 REQUIRED_REFERENCE_FIELDS = {
     "citation_key": "Citation key",
     "type": "Type",
