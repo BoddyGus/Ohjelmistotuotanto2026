@@ -45,7 +45,7 @@ def new_reference():
                 "Check the citation key and reference details."
             )
         return render_template("add_reference.html", form_data=form_data), 400
-
+    flash("Reference added successfully.", "success")
     return redirect(url_for("index"))
 
 
