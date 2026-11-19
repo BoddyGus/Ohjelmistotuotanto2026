@@ -22,12 +22,24 @@ A task is complete when:
 - the pull request has been merged into the `main` branch
 
 ## OKD
+Link to the application:
+https://route-ohjelmistotuotanto-lahiopetus-2026-18.ext.okd-cs-test-0.k8s.cs.helsinki.fi
 
 ## Local setup
 
 Create a `.env` file in the project root:
-
 ```env
 DATABASE_URL=sqlite:///test.db
 SECRET_KEY=dev-secret
 TEST_ENV=true
+```
+
+Then run:
+```bash
+cd Ohjelmistotuotanto2026
+uv sync
+uv run python src/db_helper.py
+uv run python src/index.py
+```
+
+Finally open: http://localhost:5001
