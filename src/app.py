@@ -1,7 +1,7 @@
 from flask import render_template, jsonify, request, flash, redirect, url_for
 from sqlalchemy.exc import IntegrityError
 from db_helper import reset_db
-from repositories.reference_repository import get_references, add_reference
+from repositories.reference_repository import get_references, add_reference, get_reference
 from reference_validation import (
     ReferenceValidationError,
     is_duplicate_citation_key,
@@ -48,6 +48,14 @@ def new_reference():
     flash("Reference added successfully.", "success")
     return redirect(url_for("index"))
 
+@app.route("/references/<int:reference_id>")
+def reference_details(reference_id):
+    reference = get_reference(reference_id)
+
+    if reference is None:
+        return render_template("reference_not_found.html"), 404
+
+    return render_template("reference_details.html", reference=reference)
 
 if test_env:
     @app.route("/reset_db")

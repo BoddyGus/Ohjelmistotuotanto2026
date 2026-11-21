@@ -1,44 +1,84 @@
 {% extends "layout.html" %}
 
-{% block title %}
-Add a new reference
-{% endblock %}
+{% block title %}Add a new reference{% endblock %}
 
 {% block body %}
+<h1>Add a new reference</h1>
 
-<h2>Add a new reference</h2>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="flash-error" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 
 <form action="/new_reference" method="post">
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul role="alert">
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-  <label for="citation_key">Citation key:</label>
-  <input type="text" id="citation_key" name="citation_key" value="{{ form_data.get('citation_key', '') }}" required>
-  <br>
-  <label for="type">Type:</label>
-  <input type="text" id="type" name="type" value="{{ form_data.get('type', '') }}" required>
-  <br>
-  <label for="author">Author:</label>
-  <input type="text" id="author" name="author" value="{{ form_data.get('author', '') }}" required>
-  <br>
-  <label for="title">Title:</label>
-  <input type="text" id="title" name="title" value="{{ form_data.get('title', '') }}" required>
-  <br>
-  <label for="year">Year:</label>
-  <input type="number" id="year" name="year" value="{{ form_data.get('year', '') }}" required>
-  <br>
-  <label for="publication">Publication:</label>
-  <input type="text" id="publication" name="publication" value="{{ form_data.get('publication', '') }}">
-  <br>
-  <button type="submit">
-    Add book
-  </button>
-</form>
+  <div class="form-field">
+    <label for="citation_key">Citation key:</label>
+    <input
+      type="text"
+      id="citation_key"
+      name="citation_key"
+      value="{{ form_data.get('citation_key', '') }}"
+      required
+    >
+  </div>
 
+  <div class="form-field">
+    <label for="type">Type:</label>
+    <select id="type" name="type" required>
+      <option value="" disabled {% if not form_data.get('type') %}selected{% endif %}>Select a reference type</option>
+      <option value="book" {% if form_data.get('type') == 'book' %}selected{% endif %}>Book</option>
+      <option value="article" {% if form_data.get('type') == 'article' %}selected{% endif %}>Article</option>
+      <option value="inproceedings" {% if form_data.get('type') == 'inproceedings' %}selected{% endif %}>Conference paper</option>
+    </select>
+  </div>
+
+  <div class="form-field">
+    <label for="author">Author:</label>
+    <input
+      type="text"
+      id="author"
+      name="author"
+      value="{{ form_data.get('author', '') }}"
+      required
+    >
+  </div>
+
+  <div class="form-field">
+    <label for="title">Title:</label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      value="{{ form_data.get('title', '') }}"
+      required
+    >
+  </div>
+
+  <div class="form-field">
+    <label for="year">Year:</label>
+    <input
+      type="number"
+      id="year"
+      name="year"
+      value="{{ form_data.get('year', '') }}"
+      required
+    >
+  </div>
+
+  <div class="form-field">
+    <label for="publication">Publication:</label>
+    <input
+      type="text"
+      id="publication"
+      name="publication"
+      value="{{ form_data.get('publication', '') }}"
+    >
+  </div>
+
+  <button type="submit">Add reference</button>
+  <a class="button-link" href="/">Cancel</a>
+</form>
 {% endblock %}

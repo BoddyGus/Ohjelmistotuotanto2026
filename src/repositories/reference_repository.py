@@ -33,3 +33,19 @@ def add_reference(citation_key, reference_type, author, title, year, publication
         },
     )
     db.session.commit()
+
+def get_reference(reference_id):
+    result = db.session.execute(
+        text("""
+            SELECT id, citation_key, type, author, title, year, publication
+            FROM bibliographic_references
+            WHERE id = :id
+        """),
+        {"id": reference_id},
+    )
+    row = result.fetchone()
+
+    if row is None:
+        return None
+
+    return Reference(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
