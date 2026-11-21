@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}Reference details{% endblock %}
+
+{% block body %}
+<h1>Reference details</h1>
+
+<dl class="reference-details">
+  <dt>Citation key:</dt>
+  <dd>{{ reference.citation_key }}</dd>
+
+  <dt>Type:</dt>
+  <dd>{{ reference.type }}</dd>
+
+  <dt>Author:</dt>
+  <dd>{{ reference.author }}</dd>
+
+  <dt>Title:</dt>
+  <dd>{{ reference.title }}</dd>
+
+  <dt>Year:</dt>
+  <dd>{{ reference.year }}</dd>
+
+  <dt>Publication:</dt>
+  <dd>{{ reference.publication or "-" }}</dd>
+</dl>
+
+<a class="button-link" href="/">Back to reference list</a>
+{% endblock %}
