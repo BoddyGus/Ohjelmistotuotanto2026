@@ -1,7 +1,7 @@
 import unittest
 
 from app import app
-from db_helper import reset_db
+from db_helper import setup_db
 from repositories.reference_repository import add_reference, get_reference, get_references
 
 
@@ -9,7 +9,7 @@ class TestReferenceRepository(unittest.TestCase):
     def setUp(self):
         app.config["TESTING"] = True
         with app.app_context():
-            reset_db()
+            setup_db()
 
     def test_existing_reference_can_be_retrieved(self):
         with app.app_context():
