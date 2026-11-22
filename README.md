@@ -11,6 +11,10 @@ See our [group rules](grouprules.md)
 
 [Sprint 1 backlog](https://github.com/users/BoddyGus/projects/4/views/3)
 
+## Sprint 2 backlog  
+
+[Sprint 2 backlog](https://github.com/users/BoddyGus/projects/4/views/4)   
+
 ## DoD
 
 A task is complete when:
