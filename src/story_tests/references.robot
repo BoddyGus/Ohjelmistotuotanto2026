@@ -64,6 +64,26 @@ User can return from reference details to the list
     Get Title  ==  Pooki - References
     Get Text  body  *=  detail2
 
+User can edit an existing reference including its citation key
+    Go To  ${HOME_URL}/new_reference
+    Fill Text  [name="citation_key"]  before-edit
+    Select Options By  [name="type"]  value  book
+    Fill Text  [name="author"]  Original Author
+    Fill Text  [name="title"]  Original Title
+    Fill Text  [name="year"]  2020
+    Fill Text  [name="publication"]  Original Publisher
+    Click  button >> text=Add reference
+    Click  text=before-edit
+    Click  text=Edit reference
+    Get Text  h1  ==  Edit reference
+    Get Property  [name="citation_key"]  value  ==  before-edit
+    Fill Text  [name="citation_key"]  after-edit
+    Fill Text  [name="title"]  Updated Title
+    Click  button >> text=Save changes
+    Get Text  body  *=  after-edit
+    Get Text  body  *=  Updated Title
+    Get Text  body  *=  Reference updated successfully.
+
 Unknown reference shows not found message
     Go To  ${HOME_URL}/references/999999
     Get Text  body  *=  Reference not found

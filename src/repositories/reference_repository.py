@@ -49,3 +49,30 @@ def get_reference(reference_id):
         return None
 
     return Reference(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+
+
+def update_reference(
+    reference_id, citation_key, reference_type, author, title, year, publication
+):
+    db.session.execute(
+        text("""
+            UPDATE bibliographic_references
+            SET citation_key = :citation_key,
+                type = :type,
+                author = :author,
+                title = :title,
+                year = :year,
+                publication = :publication
+            WHERE id = :id
+        """),
+        {
+            "id": reference_id,
+            "citation_key": citation_key,
+            "type": reference_type,
+            "author": author,
+            "title": title,
+            "year": year,
+            "publication": publication,
+        },
+    )
+    db.session.commit()
