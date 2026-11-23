@@ -49,3 +49,14 @@ def get_reference(reference_id):
         return None
 
     return Reference(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+
+def delete_reference(reference_id):
+    result = db.session.execute(
+        text("""
+            DELETE FROM bibliographic_references
+            WHERE id = :id
+        """),
+        {"id": reference_id},
+    )
+    db.session.commit()
+    return result.rowcount > 0

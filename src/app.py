@@ -1,7 +1,7 @@
 from flask import render_template, jsonify, request, flash, redirect, url_for
 from sqlalchemy.exc import IntegrityError
 from db_helper import reset_db
-from repositories.reference_repository import get_references, add_reference, get_reference
+from repositories.reference_repository import get_references, add_reference, get_reference, delete_reference
 from reference_validation import (
     ReferenceValidationError,
     is_duplicate_citation_key,
@@ -56,6 +56,20 @@ def reference_details(reference_id):
         return render_template("reference_not_found.html"), 404
 
     return render_template("reference_details.html", reference=reference)
+
+@app.route("/references/<int:reference_id>/delete", methods=["GET", "POST"])
+def delete_reference_view(reference_id):
+    reference = get_reference(reference_id)
+
+    if reference is None:
+        return render_template("reference_not_found.html"), 404
+
+    if request.method == "GET":
+        return render_template("confirm_delete.html", reference=reference)
+
+    delete_reference(reference_id)
+    flash("Reference deleted successfully.", "success")
+    return redirect(url_for("index"))
 
 if test_env:
     @app.route("/reset_db")
