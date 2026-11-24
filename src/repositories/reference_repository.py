@@ -60,3 +60,30 @@ def delete_reference(reference_id):
     )
     db.session.commit()
     return result.rowcount > 0
+
+
+def update_reference(
+    reference_id, citation_key, reference_type, author, title, year, publication
+):
+    db.session.execute(
+        text("""
+            UPDATE bibliographic_references
+            SET citation_key = :citation_key,
+                type = :type,
+                author = :author,
+                title = :title,
+                year = :year,
+                publication = :publication
+            WHERE id = :id
+        """),
+        {
+            "id": reference_id,
+            "citation_key": citation_key,
+            "type": reference_type,
+            "author": author,
+            "title": title,
+            "year": year,
+            "publication": publication,
+        },
+    )
+    db.session.commit()

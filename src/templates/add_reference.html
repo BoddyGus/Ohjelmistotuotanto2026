@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 
-{% block title %}Add a new reference{% endblock %}
+{% block title %}{% if editing %}Edit reference{% else %}Add a new reference{% endif %}{% endblock %}
 
 {% block body %}
-<h1>Add a new reference</h1>
+<h1>{% if editing %}Edit reference{% else %}Add a new reference{% endif %}</h1>
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -13,7 +13,10 @@
   {% endif %}
 {% endwith %}
 
-<form action="/new_reference" method="post">
+<form
+  action="{% if editing %}{{ url_for('edit_reference', reference_id=reference_id) }}{% else %}{{ url_for('new_reference') }}{% endif %}"
+  method="post"
+>
   <div class="form-field">
     <label for="citation_key">Citation key:</label>
     <input
@@ -78,7 +81,10 @@
     >
   </div>
 
-  <button type="submit">Add reference</button>
-  <a class="button-link" href="/">Cancel</a>
+  <button type="submit">{% if editing %}Save changes{% else %}Add reference{% endif %}</button>
+  <a
+    class="button-link"
+    href="{% if editing %}{{ url_for('reference_details', reference_id=reference_id) }}{% else %}{{ url_for('index') }}{% endif %}"
+  >Cancel</a>
 </form>
 {% endblock %}
