@@ -1,3 +1,4 @@
+
 from flask import render_template, jsonify, request, flash, redirect, url_for, Response, abort
 from sqlalchemy.exc import IntegrityError
 from db_helper import reset_db
@@ -5,6 +6,7 @@ from repositories.reference_repository import (
     get_references,
     add_reference,
     get_reference,
+    delete_reference,
     update_reference,
 )
 from reference_validation import (
@@ -55,8 +57,10 @@ def new_reference():
                 "Check the citation key and reference details."
             )
         return render_template("add_reference.html", form_data=form_data, editing=False), 400
+
     flash("Reference added successfully.", "success")
     return redirect(url_for("index"))
+
 
 @app.route("/references/<int:reference_id>")
 def reference_details(reference_id):
@@ -68,9 +72,25 @@ def reference_details(reference_id):
     return render_template("reference_details.html", reference=reference)
 
 
+@app.route("/references/<int:reference_id>/delete", methods=["GET", "POST"])
+def delete_reference_view(reference_id):
+    reference = get_reference(reference_id)
+
+    if reference is None:
+        return render_template("reference_not_found.html"), 404
+
+    if request.method == "GET":
+        return render_template("confirm_delete.html", reference=reference)
+
+    delete_reference(reference_id)
+    flash("Reference deleted successfully.", "success")
+    return redirect(url_for("index"))
+
+
 @app.route("/references/<int:reference_id>/edit", methods=["GET", "POST"])
 def edit_reference(reference_id):
     reference = get_reference(reference_id)
+
     if reference is None:
         return render_template("reference_not_found.html"), 404
 
@@ -132,11 +152,13 @@ def edit_reference(reference_id):
     flash("Reference updated successfully.", "success")
     return redirect(url_for("reference_details", reference_id=reference_id))
 
+
 if test_env:
     @app.route("/reset_db")
     def reset_database():
         reset_db()
-        return jsonify({ 'message': "db reset" })
+        return jsonify({'message': "db reset"})
+
 
 @app.route("/export/bibtex")
 def export_bibtex():

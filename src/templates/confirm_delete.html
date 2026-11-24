@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}Delete reference{% endblock %}
+
+{% block body %}
+<h1>Delete Reference</h1>
+<p>
+  Are you sure you want to delete the following reference: 
+  <strong>{{ reference.title }}</strong>
+  (<em>{{ reference.year }}</em>)?
+</p>
+
+<form action="/references/{{ reference.id }}/delete" method="POST">
+  <button type="submit">Delete</button>
+  <a class="button-link" href="/">Cancel</a>
+</form>
+{% endblock %}
