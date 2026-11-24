@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request, flash, redirect, url_for
+from flask import render_template, jsonify, request, flash, redirect, url_for, Response, abort
 from sqlalchemy.exc import IntegrityError
 from db_helper import reset_db
 from repositories.reference_repository import get_references, add_reference, get_reference
@@ -9,6 +9,11 @@ from reference_validation import (
 )
 from reference_types import get_reference_type
 from config import app, db, test_env
+from repositories.bibtex_formatter import (
+    format_inproceeding_reference,
+    format_article_reference,
+    format_book_reference,
+)
 
 
 @app.route("/")
@@ -62,3 +67,24 @@ if test_env:
     def reset_database():
         reset_db()
         return jsonify({ 'message': "db reset" })
+
+@app.route("/export/bibtex")
+def export_bibtex():
+    formatters = {
+        "inproceedings": format_inproceeding_reference,
+        "article": format_article_reference,
+        "book": format_book_reference,
+    }
+
+    entries = []
+    for reference in get_references():
+        formatter = formatters.get(reference.type)
+        if formatter is None:
+            abort(500, description=f"Unsupported reference type: {reference.type}")
+        entries.append(formatter(reference))
+
+    return Response(
+        "\n\n".join(entries),
+        mimetype="application/x-bibtex",
+        headers={"Content-Disposition": 'attachment; filename="references.bib"'},
+    )

@@ -1,29 +1,24 @@
-def format_inproceeding_reference(reference):
-    return (
-        f"@inproceedings{{{reference.citation_key},\n"
-        f"  author = {{{reference.author}}},\n"
-        f"  title = {{{reference.title}}},\n"
-        f"  year = {{{reference.year}}},\n"
-        f"  booktitle = {{{reference.publication or ''}}}\n"
-        "}"
+def format_reference(entry_type, reference, publication_field):
+    fields = [
+        ("author", reference.author),
+        ("title", reference.title),
+        ("year", reference.year),
+    ]
+    
+    publication = (reference.publication or "").strip()
+    if publication:
+        fields.append((publication_field, publication))
+
+    formatted_fields = ",\n".join(
+        f" {name} = {{{value}}}" for name, value in fields
     )
+    return f"@{entry_type}{{{reference.citation_key},\n{formatted_fields}\n}}"
+
+def format_inproceeding_reference(reference):
+    return format_reference("inproceedings", reference, "booktitle")
 
 def format_article_reference(reference):
-    return (
-        f"@article{{{reference.citation_key},\n"
-        f"  author = {{{reference.author}}},\n"
-        f"  title = {{{reference.title}}},\n"
-        f"  journal = {{{reference.publication or ''}}},\n"
-        f"  year = {{{reference.year}}}\n"
-        "}"
-    )
+    return format_reference("article", reference, "journal")
 
 def format_book_reference(reference):
-    return (
-        f"@book{{{reference.citation_key},\n"
-        f"  author = {{{reference.author}}},\n"
-        f"  title = {{{reference.title}}},\n"
-        f"  year = {{{reference.year}}},\n"
-        f"  publisher = {{{reference.publication or ''}}}\n"
-        "}"
-    )
+    return format_reference("book", reference, "publisher")
