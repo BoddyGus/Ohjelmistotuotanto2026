@@ -4,14 +4,15 @@
 
 {% block body %}
 <h1>Delete Reference</h1>
+
 <p>
-  Are you sure you want to delete the following reference: 
-  <strong>{{ reference.title }}</strong>
-  (<em>{{ reference.year }}</em>)?
+  Are you sure you want to delete
+  <em>{{ reference.title }}</em>
+  by <strong>{{ reference.author }}</strong>?
 </p>
 
 <form action="/references/{{ reference.id }}/delete" method="POST">
-  <button type="submit">Delete</button>
+  <button type="submit" class="button-danger">Confirm delete</button>
   <a class="button-link" href="/">Cancel</a>
 </form>
 {% endblock %}

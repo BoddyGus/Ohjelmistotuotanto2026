@@ -19,5 +19,16 @@ Open And Configure Browser
     New Context
     New Page  about:blank
 
+Add Test Reference
+    [Arguments]  ${key}  ${title}
+    Go To  ${HOME_URL}/new_reference
+    Fill Text  [name="citation_key"]  ${key}
+    Select Options By  [name="type"]  value  book
+    Fill Text  [name="author"]  Test Author
+    Fill Text  [name="title"]  ${title}
+    Fill Text  [name="year"]  2026
+    Click  button >> text=Add reference
+    Get Text  body  *=  Reference added successfully.
+
 Reset References
     Go To  ${RESET_URL}

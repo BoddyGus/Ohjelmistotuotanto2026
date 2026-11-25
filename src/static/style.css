@@ -166,6 +166,16 @@ button:hover,
   color: var(--muted);
 }
 
+.button-danger {
+  background-color: #c62828;
+  border-color: #c62828;
+  color: #ffffff;
+}
+
+.button-danger:hover {
+  background-color: #8e0000;
+  border-color: #8e0000;
+}
 
 @media (max-width: 800px) {
   body {
