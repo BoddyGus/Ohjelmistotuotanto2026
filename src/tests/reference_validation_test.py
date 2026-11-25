@@ -1,3 +1,4 @@
+from datetime import date
 import unittest
 from types import SimpleNamespace
 
@@ -75,6 +76,56 @@ class TestReferenceValidation(unittest.TestCase):
                     "year": "not a year",
                 }
             )
+
+    def test_negative_year_raises_error(self):
+        with self.assertRaisesRegex(ReferenceValidationError, "Year must be positive"):
+            validate_reference(
+                {
+                    "citation_key": "lovelace1843",
+                    "type": "book",
+                    "author": "Ada Lovelace",
+                    "title": "Notes",
+                    "year": "-1843",
+                }
+            )
+
+    def test_zero_year_raises_error(self):
+        with self.assertRaisesRegex(ReferenceValidationError, "Year must be positive"):
+            validate_reference(
+                {
+                    "citation_key": "lovelace1843",
+                    "type": "book",
+                    "author": "Ada Lovelace",
+                    "title": "Notes",
+                    "year": "0",
+                }
+            )
+
+    def test_future_year_raises_error(self):
+        future_year = date.today().year + 1
+        with self.assertRaisesRegex(ReferenceValidationError, "Year cannot be in the future"):
+            validate_reference(
+                {
+                    "citation_key": "future",
+                    "type": "book",
+                    "author": "Ada Lovelace",
+                    "title": "Notes",
+                    "year": str(future_year),
+                }
+            )
+
+    def test_current_year_is_valid(self):
+        reference = validate_reference(
+            {
+                "citation_key": "current",
+                "type": "book",
+                "author": "Ada Lovelace",
+                "title": "Notes",
+                "year": str(date.today().year),
+            }
+        )
+
+        self.assertEqual(reference["year"], date.today().year)
 
 
 if __name__ == "__main__":
