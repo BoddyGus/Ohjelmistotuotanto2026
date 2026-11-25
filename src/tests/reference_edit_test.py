@@ -20,6 +20,11 @@ class TestReferenceEdit(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'value="original"', response.data)
         self.assertIn(b'value="Publisher"', response.data)
+        self.assertIn(
+            f'href="/references/{self.reference_id}/delete"'.encode(),
+            response.data,
+        )
+        self.assertIn(b">Delete</a>", response.data)
 
         response = self.client.post(
             f"/references/{self.reference_id}/edit",

@@ -1,3 +1,6 @@
+from datetime import date
+
+
 class ReferenceValidationError(Exception):
     """Raised when submitted reference data is invalid."""
 
@@ -37,6 +40,11 @@ def validate_reference(form_data):
         year = int(form_data["year"])
     except (TypeError, ValueError) as error:
         raise ReferenceValidationError("Year must be a number.") from error
+
+    if year <= 0:
+        raise ReferenceValidationError("Year must be positive.")
+    if year > date.today().year:
+        raise ReferenceValidationError("Year cannot be in the future.")
 
     return {
         "citation_key": form_data["citation_key"].strip(),
