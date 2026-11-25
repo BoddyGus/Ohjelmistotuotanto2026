@@ -27,3 +27,22 @@ User can download BibTex file
     Should Contain  ${bib}  author = {Test Author}
     Should Contain  ${bib}  title = {Test Book}
     Should Contain  ${bib}  publisher = {Test Publisher}
+
+
+Deleted reference is not included in BibTeX export
+    Add Test Reference  export-keep  Kept Book
+    Add Test Reference  export-gone  Deleted Book
+
+    Go To  ${HOME_URL}
+    Click  li:has-text("export-gone") >> a[href$="/delete"]
+    Click  button >> text=Confirm delete
+    Get Text  body  *=  Reference deleted successfully.
+
+    ${download_promise}=  Promise To Wait For Download  saveAs=${OUTPUT DIR}${/}references-after-delete.bib
+    Click  text=Export references as BibTeX
+    Wait For  ${download_promise}
+
+    ${bib}=  Get File  ${OUTPUT DIR}${/}references-after-delete.bib
+    Should Contain  ${bib}  @book{export-keep,
+    Should Not Contain  ${bib}  export-gone
+    Should Not Contain  ${bib}  Deleted Book
