@@ -89,3 +89,33 @@ Unknown reference shows not found message
     Get Text  body  *=  Reference not found
     Click  text=Back to reference list
     Get Title  ==  Pooki - References
+
+User is asked to confirm before deleting a reference
+    Add Test Reference  del1  Delete Me
+    Go To  ${HOME_URL}
+    Click  a[href$="/delete"]
+    Get Text  h1  ==  Delete Reference
+    Get Text  body  *=  Are you sure you want to delete
+    Get Text  body  *=  Delete Me
+    Get Text  body  *=  Test Author
+
+User can cancel deleting a reference
+    Add Test Reference  del2  Keep Me
+    Go To  ${HOME_URL}
+    Click  a[href$="/delete"]
+    Click  text=Cancel
+    Get Title  ==  Pooki - References
+    Get Text  body  *=  del2
+
+User can delete a reference after confirming
+    Add Test Reference  del3  Remove Me
+    Go To  ${HOME_URL}
+    Click  a[href$="/delete"]
+    Click  button >> text=Confirm delete
+    Get Text  body  *=  Reference deleted successfully.
+    Get Text  body  *=  No references have been added.
+    Get Text  body  not contains  del3
+
+Deleting unknown reference shows not found message
+    Go To  ${HOME_URL}/references/999999/delete
+    Get Text  body  *=  Reference not found
